@@ -1,0 +1,34 @@
+# Create age groups
+Social_Media_Vs_Productivity <- Social_Media_Vs_Productivity %>%
+  mutate(age_group = case_when(
+    age < 30 ~ "Under 30",
+    age < 50 ~ "30-49",
+    TRUE ~ "50+"
+  ))
+
+# Summarize average productivity by age group and social media time range
+Social_Media_Vs_Productivity <- Social_Media_Vs_Productivity %>%
+  mutate(social_media_range = case_when(
+    daily_social_media_time < 1 ~ "<1 hr",
+    daily_social_media_time < 2 ~ "1-2 hrs",
+    daily_social_media_time < 3 ~ "2-3 hrs",
+    daily_social_media_time < 4 ~ "3-4 hrs",
+    TRUE ~ "4+ hrs"
+  ))
+
+age_productivity_summary <- Social_Media_Vs_Productivity %>%
+  group_by(age_group, social_media_range) %>%
+  summarise(
+    avg_productivity = mean(actual_productivity_score, na.rm = TRUE),
+    count = n()
+  )
+print(age_productivity_summary)
+
+# Optional: Plot average productivity by age group and social media use
+library(ggplot2)
+ggplot(age_productivity_summary, aes(x = social_media_range, y = avg_productivity, fill = age_group)) +
+  geom_col(position = "dodge") +
+  labs(title = "Productivity by Age Group and Social Media Use",
+       x = "Daily Social Media Time",
+       y = "Average Productivity Score") +
+  theme_minimal()
