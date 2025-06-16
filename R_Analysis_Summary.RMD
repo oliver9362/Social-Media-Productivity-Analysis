@@ -14,13 +14,13 @@ library(tidyverse)
 Social_Media_Vs_Productivity <- read_csv("Social Media Vs Productivity.csv")
 ```
 
-##Introduction
+## Introduction
 This report explores the impact of digital habits on workplace productivity and aims to provide insight on how an upcoming focus app could best tackle digital habits and convert that into better productivity. The analysis focuses on:
 - How social media use correlates with work hours and productivity
 - How these effects vary across age groups
 - Which digital habits (notifications, screen time before bed) are most associated with lower productivity
 
-##Social Media Time and Work Hours
+## Social Media Time and Work Hours
 
 ```{r}
 Social_Media_Vs_Productivity <- Social_Media_Vs_Productivity %>%
@@ -59,7 +59,9 @@ ggplot(social_media_vs_work, aes(x = social_media_range, y = avg_work_hours, fil
   theme_minimal() +
   theme(legend.position = "none")
 ```
-##Social Media Time Vs Productivity
+This visualization shows that there is actually no real change at all in work hours vs social media hours. This suggests that daily work hours remain relatively consistent regardless of social media usage, implying that social media use may not directly reduce time spent working but could still affect productivity.
+
+## Social Media Time Vs Productivity
 
 ```{r}
 ggplot(Social_Media_Vs_Productivity, aes(x = daily_social_media_time, y = actual_productivity_score)) +
@@ -69,7 +71,9 @@ ggplot(Social_Media_Vs_Productivity, aes(x = daily_social_media_time, y = actual
        x = "Daily Social Media Time (hrs)",
        y = "Actual Productivity Score")
 ```
-##Productivity by Age Group And Social Media Time
+This chart does show a weak negative correlation, meaning that the more time is being spent on social media, the less productive the individual is like to be although there is a wide spread on the data points, showing a big variation in productivity across all social media times.
+
+## Productivity by Age Group And Social Media Time
 
 ```{r}
 # Create age groups
@@ -107,7 +111,9 @@ ggplot(age_productivity_summary, aes(x = social_media_range, y = avg_productivit
        y = "Average Productivity Score") +
   theme_minimal()
 ```
-##Relationship Between Digital Habits and Productivity.
+Productivity scores appear relatively stable across age groups for each social media use range, suggesting that age is not a strong moderator in the relationship between social media use and productivity
+
+## Relationship Between Digital Habits and Productivity.
 
 ```{r}
 # Reshape data to long format
@@ -131,6 +137,7 @@ ggplot(long_data, aes(x = habit_value, y = actual_productivity_score)) +
   ) +
   theme_minimal()
 ```
+This visualization shows that the most important variable in productivity for the start up app to target is the daily social media score because it shows the strongest correlation with decreased productivity of all the factors.
 
-##Data Source
+## Data Source
 This dataset was made by the Kaggle user Mahdi Mashayekh and can be found here: https://www.kaggle.com/datasets/mahdimashayekhi/social-media-vs-productivity
