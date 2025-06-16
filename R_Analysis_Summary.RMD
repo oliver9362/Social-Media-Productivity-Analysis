@@ -1,0 +1,136 @@
+---
+title: "The Impact of Social Media on Workplace Productivity"
+author: "Oliver Leng"
+date: "2025-06-16"
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+Social_Media_Vs_Productivity <- read_csv("Social Media Vs Productivity.csv")
+```
+
+##Introduction
+This report explores the impact of digital habits on workplace productivity and aims to provide insight on how an upcoming focus app could best tackle digital habits and convert that into better productivity. The analysis focuses on:
+- How social media use correlates with work hours and productivity
+- How these effects vary across age groups
+- Which digital habits (notifications, screen time before bed) are most associated with lower productivity
+
+##Social Media Time and Work Hours
+
+```{r}
+Social_Media_Vs_Productivity <- Social_Media_Vs_Productivity %>%
+  mutate(
+    daily_social_media_time = as.numeric(daily_social_media_time),
+    social_media_range = case_when(
+      daily_social_media_time < 1 ~ "<1 hr",
+      daily_social_media_time < 2 ~ "1-2 hrs",
+      daily_social_media_time < 3 ~ "2-3 hrs",
+      daily_social_media_time < 4 ~ "3-4 hrs",
+      TRUE ~ "4+ hrs"
+    ),
+    social_media_range = factor(social_media_range, levels = c("<1 hr", "1-2 hrs", "2-3 hrs", "3-4 hrs", "4+ hrs"))
+  )
+
+social_media_vs_work <- Social_Media_Vs_Productivity %>%
+  group_by(social_media_range) %>%
+  summarise(
+    avg_work_hours = mean(work_hours_per_day, na.rm = TRUE),
+    count = n()
+  ) %>%
+  ungroup()
+
+ggplot(social_media_vs_work, aes(x = social_media_range, y = avg_work_hours, fill = social_media_range)) +
+  geom_col() +
+  scale_fill_manual(values = c(
+    "<1 hr" = "#1b9e77",
+    "1-2 hrs" = "#d95f02",
+    "2-3 hrs" = "#7570b3",
+    "3-4 hrs" = "#e7298a",
+    "4+ hrs" = "#66a61e"
+  )) +
+  labs(title = "Average Work Hours by Social Media Time",
+       x = "Social Media Use",
+       y = "Average Work Hours") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+##Social Media Time Vs Productivity
+
+```{r}
+ggplot(Social_Media_Vs_Productivity, aes(x = daily_social_media_time, y = actual_productivity_score)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", color = "blue") +
+  labs(title = "Social Media Time vs. Productivity",
+       x = "Daily Social Media Time (hrs)",
+       y = "Actual Productivity Score")
+```
+##Productivity by Age Group And Social Media Time
+
+```{r}
+# Create age groups
+Social_Media_Vs_Productivity <- Social_Media_Vs_Productivity %>%
+  mutate(age_group = case_when(
+    age < 30 ~ "Under 30",
+    age < 50 ~ "30-49",
+    TRUE ~ "50+"
+  ))
+
+# Summarize average productivity by age group and social media time range
+Social_Media_Vs_Productivity <- Social_Media_Vs_Productivity %>%
+  mutate(social_media_range = case_when(
+    daily_social_media_time < 1 ~ "<1 hr",
+    daily_social_media_time < 2 ~ "1-2 hrs",
+    daily_social_media_time < 3 ~ "2-3 hrs",
+    daily_social_media_time < 4 ~ "3-4 hrs",
+    TRUE ~ "4+ hrs"
+  ))
+
+age_productivity_summary <- Social_Media_Vs_Productivity %>%
+  group_by(age_group, social_media_range) %>%
+  summarise(
+    avg_productivity = mean(actual_productivity_score, na.rm = TRUE),
+    count = n()
+  )
+print(age_productivity_summary)
+
+# Optional: Plot average productivity by age group and social media use
+library(ggplot2)
+ggplot(age_productivity_summary, aes(x = social_media_range, y = avg_productivity, fill = age_group)) +
+  geom_col(position = "dodge") +
+  labs(title = "Productivity by Age Group and Social Media Use",
+       x = "Daily Social Media Time",
+       y = "Average Productivity Score") +
+  theme_minimal()
+```
+##Relationship Between Digital Habits and Productivity.
+
+```{r}
+# Reshape data to long format
+long_data <- Social_Media_Vs_Productivity %>%
+  select(actual_productivity_score, daily_social_media_time, number_of_notifications, screen_time_before_sleep) %>%
+  pivot_longer(
+    cols = -actual_productivity_score,
+    names_to = "digital_habit",
+    values_to = "habit_value"
+  )
+
+# Plot
+ggplot(long_data, aes(x = habit_value, y = actual_productivity_score)) +
+  geom_point(alpha = 0.3, color = "steelblue") +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  facet_wrap(~ digital_habit, scales = "free_x") +
+  labs(
+    title = "Relationship Between Digital Habits and Productivity",
+    x = "Digital Habit Value",
+    y = "Productivity Score"
+  ) +
+  theme_minimal()
+```
+
+##Data Source
+This dataset was made by the Kaggle user Mahdi Mashayekh and can be found here: https://www.kaggle.com/datasets/mahdimashayekhi/social-media-vs-productivity
