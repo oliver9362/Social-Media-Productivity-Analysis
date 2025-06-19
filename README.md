@@ -16,10 +16,14 @@ This repository includes:
 - **R** (including tidyverse, ggplot2, dplyr)
 - **Excel** (for preliminary exploration and visualisation)
 
+---
+
 ## Results
 You can view the results by:
 - Opening the Powerpoint presentation.
 - Running the .RMD file for an interactive summary.
+
+---
 
 ## Dataset
 The dataset was sourced from Kaggle and can be found here:  
