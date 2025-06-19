@@ -6,9 +6,13 @@ This project explores the relationship between social media use and productivity
 ## Project Contents
 This repository includes:
 
--[Project Report](The Impact of Social Media on Workplace Productivity.docx) - A written report detailing my work on this project.
--[R Analysis](R_Analysis_Summary.RMD) - An R markdown file showing my visualisations and insights.
--[Stakeholder Powerpoint](The Impact of Social Media on Workplace Productivity.pptx) - Final presentation for shareholders.
+## Project Contents
+This repository includes:
+
+- [Project Report](The%20Impact%20of%20Social%20Media%20on%20Workplace%20Productivity.docx) - A written report detailing my work on this project.
+- [R Analysis](R_Analysis_Summary.RMD) - An R markdown file showing my visualisations and insights.
+- [Stakeholder Powerpoint](The%20Impact%20of%20Social%20Media%20on%20Workplace%20Productivity.pptx) - Final presentation for shareholders.
+
 
 ---
 
